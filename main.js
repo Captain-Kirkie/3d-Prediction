@@ -1,6 +1,7 @@
-let camera, scene, renderer, cube, controls;
-const size = 10,
-    divisions = 10;
+let camera, scene, renderer, cube, controls, rocket;
+const size = 100,
+    divisions = 50;
+let xIncrease = true;
 
 function init() {
     // Init scene
@@ -22,8 +23,10 @@ function init() {
 
     // Render to canvas element
     document.body.appendChild(renderer.domElement);
-    const rocket = createRocket();
+
+    rocket = createRocket();
     scene.add(rocket);
+
     // Position camera
     camera.position.z = 5;
     const gridHelper = new THREE.GridHelper(size, divisions);
@@ -92,6 +95,26 @@ function animate() {
     controls.update();
 
     renderer.render(scene, camera);
+    wiggleRocket();
+    // rocket.rotation.z += 0.01;
+}
+
+function wiggleRocket() {
+    if (rocket.rotation.x > 1) {
+        xIncrease = false;
+    } else if (rocket.rotation.x < -1) {
+        xIncrease = true;
+    }
+
+    if (xIncrease) {
+        rocket.rotation.x += 0.01;
+    } else {
+        rocket.rotation.x -= 0.01;
+    }
+
+    rocket.rotation.y += 0.01;
+
+    console.log(`x ${rocket.rotation.x}`);
 }
 
 function onWindowResize() {
