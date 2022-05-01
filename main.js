@@ -68,13 +68,7 @@ function createRocket() {
     cone.position.y = cylinder.position.y + cylinderHeight;
 
     // RingGeometry(innerRadius : Float, outerRadius : Float, thetaSegments : Integer, phiSegments : Integer, thetaStart : Float, thetaLength : Float)
-    const ringGeometry = new THREE.RingGeometry(
-        sharedRadius,
-        sharedRadius + 5,
-        9,
-        8,
-        1
-    );
+    const ringGeometry = new THREE.RingGeometry(sharedRadius, 5, 9, 8, 1);
     const ringMaterial = new THREE.MeshBasicMaterial({
         side: THREE.DoubleSide,
         color: 800000,
@@ -83,6 +77,7 @@ function createRocket() {
     const ring = new THREE.Mesh(ringGeometry, ringMaterial);
     // ring.rotation.set(new THREE.Vector3(0, 0, Math.PI / 2));
     ring.rotation.x = Math.PI / 2;
+    ring.position.y = -3.5;
 
     group.add(cone);
     group.add(cylinder);
