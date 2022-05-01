@@ -1,6 +1,7 @@
 let camera, scene, renderer, cube, controls;
 const size = 10,
     divisions = 10;
+
 function init() {
     // Init scene
     scene = new THREE.Scene();
@@ -21,24 +22,8 @@ function init() {
 
     // Render to canvas element
     document.body.appendChild(renderer.domElement);
-
-    // Init BoxGeometry object (rectangular cuboid)
-    const geometry = new THREE.BoxGeometry(3, 3, 3);
-
-    // Create material with color
-    const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
-
-    // Add texture -
-    // const texture = new THREE.TextureLoader().load('textures/crate.gif');
-
-    // Create material with texture
-    // const material = new THREE.MeshBasicMaterial({ map: texture });
-
-    // Create mesh with geo and material
-    cube = new THREE.Mesh(geometry, material);
-    // Add to scene
-    scene.add(cube);
-
+    const rocket = createRocket();
+    scene.add(rocket);
     // Position camera
     camera.position.z = 5;
     const gridHelper = new THREE.GridHelper(size, divisions);
@@ -50,13 +35,42 @@ function init() {
     controls.update();
 }
 
+function createRocket() {
+    const group = new THREE.Group();
+
+    const cylinderHeight = 10;
+    //  radius, height, raidal segments
+    const coneGeometry = new THREE.ConeGeometry(5, 10, 32);
+    const coneMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+    const cone = new THREE.Mesh(coneGeometry, coneMaterial);
+
+    // rad top, bottom, height, segments
+    const cylinderGeometry = new THREE.CylinderGeometry(
+        5,
+        5,
+        cylinderHeight,
+        32
+    );
+
+    // Add texture -
+    const texture = new THREE.TextureLoader().load("textures/texture1.jpg");
+
+    //Create material with texture
+    const materialCylinder = new THREE.MeshBasicMaterial({ map: texture });
+
+    const cylinder = new THREE.Mesh(cylinderGeometry, materialCylinder);
+
+    cone.position.y = cylinder.position.y + cylinderHeight;
+
+    group.add(cone);
+    group.add(cylinder);
+
+    return group;
+}
+
 // Draw the scene every time the screen is refreshed
 function animate() {
     requestAnimationFrame(animate);
-
-    // Rotate cube (Change values to change speed)
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
 
     controls.update();
 
