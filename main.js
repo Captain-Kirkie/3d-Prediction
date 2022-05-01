@@ -1,4 +1,4 @@
-let camera, scene, renderer, cube, controls, rocket;
+let camera, scene, renderer, cube, controls, rocket, textureLoader;
 const size = 100,
     divisions = 50;
 let xIncrease = true;
@@ -15,6 +15,7 @@ function init() {
         1000
     );
 
+    textureLoader = new THREE.TextureLoader();
     // Init renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
 
@@ -45,7 +46,7 @@ function createRocket() {
         sharedRadius = 2;
     //  radius, height, raidal segments
     const coneGeometry = new THREE.ConeGeometry(sharedRadius, 10, 32);
-    const rainbowTexture = new THREE.TextureLoader().load(
+    const rainbowTexture = textureLoader.load(
         "textures/ranbow.jpg"
     );
     const coneMaterial = new THREE.MeshBasicMaterial({ map: rainbowTexture });
