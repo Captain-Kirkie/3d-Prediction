@@ -38,9 +38,10 @@ function init() {
 function createRocket() {
     const group = new THREE.Group();
 
-    const cylinderHeight = 10;
+    const cylinderHeight = 10,
+        sharedRadius = 2;
     //  radius, height, raidal segments
-    const coneGeometry = new THREE.ConeGeometry(5, 10, 32);
+    const coneGeometry = new THREE.ConeGeometry(sharedRadius, 10, 32);
     const rainbowTexture = new THREE.TextureLoader().load(
         "textures/ranbow.jpg"
     );
@@ -50,8 +51,8 @@ function createRocket() {
 
     // rad top, bottom, height, segments
     const cylinderGeometry = new THREE.CylinderGeometry(
-        5,
-        5,
+        sharedRadius,
+        sharedRadius,
         cylinderHeight,
         32
     );
@@ -66,9 +67,26 @@ function createRocket() {
 
     cone.position.y = cylinder.position.y + cylinderHeight;
 
+    // RingGeometry(innerRadius : Float, outerRadius : Float, thetaSegments : Integer, phiSegments : Integer, thetaStart : Float, thetaLength : Float)
+    const ringGeometry = new THREE.RingGeometry(
+        sharedRadius,
+        sharedRadius + 5,
+        9,
+        8,
+        1
+    );
+    const ringMaterial = new THREE.MeshBasicMaterial({
+        side: THREE.DoubleSide,
+        color: 800000,
+    });
+
+    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+    // ring.rotation.set(new THREE.Vector3(0, 0, Math.PI / 2));
+    ring.rotation.x = Math.PI / 2;
+
     group.add(cone);
     group.add(cylinder);
-
+    group.add(ring);
     return group;
 }
 
