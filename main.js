@@ -41,7 +41,11 @@ function createRocket() {
     const cylinderHeight = 10;
     //  radius, height, raidal segments
     const coneGeometry = new THREE.ConeGeometry(5, 10, 32);
-    const coneMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+    const rainbowTexture = new THREE.TextureLoader().load(
+        "textures/ranbow.jpg"
+    );
+    const coneMaterial = new THREE.MeshBasicMaterial({ map: rainbowTexture });
+
     const cone = new THREE.Mesh(coneGeometry, coneMaterial);
 
     // rad top, bottom, height, segments
