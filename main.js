@@ -39,16 +39,66 @@ function init() {
     controls.update();
 }
 
+function createFins() {
+    const numFins = 2;
+    const finGroup = new THREE.Group();
+
+    const image_radius = 4;
+    const radius = 4;
+    const radian_interval = (2.0 * Math.PI) / numFins;
+    const center_of_wheel = {
+        x: 0,
+        y: 0,
+    };
+
+    // Load an image file into a custom material
+    material = new THREE.MeshBasicMaterial({
+        // transparent: true,
+        opacity: 1,
+    });
+
+    // circle = new THREE.CircleGeometry(image_radius, 0, 0, 6.28);
+    // mesh = new THREE.Mesh(circle, material);
+    // // mesh.rotation.x = Math.PI / 2;
+    // // mesh.rotation.y = Math.PI / 2;
+    // mesh.rotation.x = 0;
+
+    // mesh.material.side = THREE.DoubleSide;
+
+    // finGroup.add(mesh);
+
+    return finGroup;
+}
+
+function drawTriangle() {
+    const shape = new THREE.Shape();
+
+    const x = 0;
+    const y = 0;
+
+    shape.moveTo(x - 5, y - 5);
+    shape.lineTo(x + 5, y - 5);
+    shape.lineTo(x, y + 5);
+
+    const TriangleGeometry = new THREE.ShapeGeometry(shape);
+
+    const material = new THREE.MeshBasicMaterial({
+        side: THREE.DoubleSide,
+        color: 65535, // cian
+    });
+    const triangle = new THREE.Mesh(TriangleGeometry, material);
+    // triangle.rotation.y += 45;
+    return triangle;
+}
+
 function createRocket() {
-    const group = new THREE.Group();
+    const rocketGroup = new THREE.Group();
 
     const cylinderHeight = 10,
         sharedRadius = 2;
     //  radius, height, raidal segments
     const coneGeometry = new THREE.ConeGeometry(sharedRadius, 10, 32);
-    const rainbowTexture = textureLoader.load(
-        "textures/ranbow.jpg"
-    );
+    const rainbowTexture = textureLoader.load("textures/ranbow.jpg");
     const coneMaterial = new THREE.MeshBasicMaterial({ map: rainbowTexture });
 
     const cone = new THREE.Mesh(coneGeometry, coneMaterial);
@@ -72,21 +122,27 @@ function createRocket() {
     cone.position.y = cylinder.position.y + cylinderHeight;
 
     // RingGeometry(innerRadius : Float, outerRadius : Float, thetaSegments : Integer, phiSegments : Integer, thetaStart : Float, thetaLength : Float)
-    const ringGeometry = new THREE.RingGeometry(sharedRadius, 5, 9, 8, 1);
-    const ringMaterial = new THREE.MeshBasicMaterial({
-        side: THREE.DoubleSide,
-        color: 800000,
-    });
+    // const ringGeometry = new THREE.RingGeometry(sharedRadius, 5, 9, 8, 1);
+    // const ringMaterial = new THREE.MeshBasicMaterial({
+    //     side: THREE.DoubleSide,
+    //     color: 800000,
+    // });
 
-    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-    // ring.rotation.set(new THREE.Vector3(0, 0, Math.PI / 2));
-    ring.rotation.x = Math.PI / 2;
-    ring.position.y = -3.5;
+    // const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+    // // ring.rotation.set(new THREE.Vector3(0, 0, Math.PI / 2));
+    // ring.rotation.x = Math.PI / 2;
+    // ring.position.y = -3.5;
 
-    group.add(cone);
-    group.add(cylinder);
-    group.add(ring);
-    return group;
+    const fin1 = drawTriangle();
+    const fin2 = drawTriangle();
+    fin2.rotateY(THREE.Math.degToRad(90));
+    rocketGroup.add(fin1);
+    rocketGroup.add(fin2);
+    rocketGroup.add(cone);
+    rocketGroup.add(cylinder);
+    // rocketGroup.add(ring);
+
+    return rocketGroup;
 }
 
 // Draw the scene every time the screen is refreshed
@@ -96,7 +152,7 @@ function animate() {
     controls.update();
 
     renderer.render(scene, camera);
-    wiggleRocket();
+    // wiggleRocket();
     // rocket.rotation.z += 0.01;
 }
 
