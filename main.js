@@ -1,4 +1,4 @@
-let camera, scene, renderer, cube, controls, rocket, textureLoader;
+let camera, scene, renderer, cube, controls, rocket, textureLoader, plane;
 const size = 100,
     divisions = 50;
 let xIncrease = true;
@@ -27,6 +27,10 @@ function init() {
 
     rocket = createRocket();
     scene.add(rocket);
+
+    // add a plane
+    plane = drawPlane();
+    scene.add(plane);
 
     // Position camera
     camera.position.z = 5;
@@ -91,11 +95,24 @@ function drawTriangle() {
     return triangle;
 }
 
+function drawPlane() {
+    const lineGeo = new THREE.PlaneGeometry(10, 10);
+    1, 1;
+    const texture = textureLoader.load(
+        "textures/CEF1A7F5-E8A9-4EE3-AF5F-F09B72A74F4B.JPG"
+    );
+    const material = new THREE.MeshBasicMaterial({ map: texture });
+    const plane = new THREE.Mesh(lineGeo, material);
+    plane.rotation.x = Math.PI / 2;
+    return plane;
+}
+
 function createRocket() {
     const rocketGroup = new THREE.Group();
 
     const cylinderHeight = 10,
         sharedRadius = 2;
+
     //  radius, height, raidal segments
     const coneGeometry = new THREE.ConeGeometry(sharedRadius, 10, 32);
     const rainbowTexture = textureLoader.load("textures/ranbow.jpg");
@@ -132,7 +149,6 @@ function createRocket() {
     // // ring.rotation.set(new THREE.Vector3(0, 0, Math.PI / 2));
     // ring.rotation.x = Math.PI / 2;
     // ring.position.y = -3.5;
-
     const fin1 = drawTriangle();
     const fin2 = drawTriangle();
     fin2.rotateY(THREE.Math.degToRad(90));
@@ -140,7 +156,6 @@ function createRocket() {
     rocketGroup.add(fin2);
     rocketGroup.add(cone);
     rocketGroup.add(cylinder);
-    // rocketGroup.add(ring);
 
     return rocketGroup;
 }
@@ -150,15 +165,27 @@ function animate() {
     requestAnimationFrame(animate);
 
     controls.update();
-
     renderer.render(scene, camera);
     wiggleRocket();
+    launchRocket();
+    launchPlane();
+}
+
+function launchRocket() {
+    rocket.position.y += 0.01;
+    // do some crazy math here
+    // https://en.wikipedia.org/wiki/PID_controller
+}
+
+// random speeds
+function launchPlane() {
+    plane.position.y += Math.random() * 0.5;
 }
 
 function wiggleRocket() {
-    if (rocket.rotation.x > 1) {
+    if (rocket.rotation.x > 0.5) {
         xIncrease = false;
-    } else if (rocket.rotation.x < -1) {
+    } else if (rocket.rotation.x < -0.5) {
         xIncrease = true;
     }
 
@@ -168,8 +195,7 @@ function wiggleRocket() {
         rocket.rotation.x -= 0.01;
     }
     // rocket.rotation.z += 0.01;
-
-    rocket.rotation.y += 0.01;
+    rocket.rotation.y += 0.02;
 
     console.log(`x ${rocket.rotation.x}`);
 }
