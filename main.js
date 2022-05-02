@@ -112,7 +112,7 @@ function createRocket() {
     );
 
     // Add texture -
-    const texture = new THREE.TextureLoader().load("textures/texture1.jpg");
+    const texture = new THREE.TextureLoader().load("textures/polkadots.jpg");
 
     //Create material with texture
     const materialCylinder = new THREE.MeshBasicMaterial({ map: texture });
@@ -152,8 +152,7 @@ function animate() {
     controls.update();
 
     renderer.render(scene, camera);
-    // wiggleRocket();
-    // rocket.rotation.z += 0.01;
+    wiggleRocket();
 }
 
 function wiggleRocket() {
@@ -168,6 +167,7 @@ function wiggleRocket() {
     } else {
         rocket.rotation.x -= 0.01;
     }
+    // rocket.rotation.z += 0.01;
 
     rocket.rotation.y += 0.01;
 
