@@ -2,6 +2,11 @@ let camera, scene, renderer, cube, controls, rocket, textureLoader, plane;
 const size = 100,
     divisions = 50;
 let xIncrease = true;
+                // gravity power of thruster 
+const gravity = -0.01;
+let thrust = 0.03;
+
+let velocity = 0;
 
 function init() {
     // Init scene
@@ -60,16 +65,6 @@ function createFins() {
         // transparent: true,
         opacity: 1,
     });
-
-    // circle = new THREE.CircleGeometry(image_radius, 0, 0, 6.28);
-    // mesh = new THREE.Mesh(circle, material);
-    // // mesh.rotation.x = Math.PI / 2;
-    // // mesh.rotation.y = Math.PI / 2;
-    // mesh.rotation.x = 0;
-
-    // mesh.material.side = THREE.DoubleSide;
-
-    // finGroup.add(mesh);
 
     return finGroup;
 }
@@ -138,17 +133,6 @@ function createRocket() {
 
     cone.position.y = cylinder.position.y + cylinderHeight;
 
-    // RingGeometry(innerRadius : Float, outerRadius : Float, thetaSegments : Integer, phiSegments : Integer, thetaStart : Float, thetaLength : Float)
-    // const ringGeometry = new THREE.RingGeometry(sharedRadius, 5, 9, 8, 1);
-    // const ringMaterial = new THREE.MeshBasicMaterial({
-    //     side: THREE.DoubleSide,
-    //     color: 800000,
-    // });
-
-    // const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-    // // ring.rotation.set(new THREE.Vector3(0, 0, Math.PI / 2));
-    // ring.rotation.x = Math.PI / 2;
-    // ring.position.y = -3.5;
     const fin1 = drawTriangle();
     const fin2 = drawTriangle();
     fin2.rotateY(THREE.Math.degToRad(90));
@@ -172,7 +156,11 @@ function animate() {
 }
 
 function launchRocket() {
-    rocket.position.y += 0.01;
+    
+    const currentVelocity = velocity;
+    let acceleration = gravity + thrust;
+    velocity = acceleration + velocity
+    rocket.position.y += currentVelocity;
     // do some crazy math here
     // https://en.wikipedia.org/wiki/PID_controller
 }
